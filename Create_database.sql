@@ -1,0 +1,88 @@
+CREATE TABLE Addresesses (
+    id SERIAL PRIMARY KEY NOT NULL,
+    country VARCHAR(25),
+    city VARCHAR(30),
+    street VARCHAR(30),
+    house VARCHAR(30)
+);
+
+CREATE TABLE Phones(
+    id SERIAL PRIMARY KEY NOT NULL,
+    number VARCHAR(11) NOT NULL,
+    type VARCHAR(15)
+);
+
+CREATE TABLE Clients (
+  id SERIAL PRIMARY KEY NOT NULL,
+  name VARCHAR(45) NOT NULL,
+  age INT NOT NULL,
+  idPhone INT NOT NULL REFERENCES Phones(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  idAdresesses INT NOT NULL REFERENCES Addresesses(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+CREATE TABLE Branchs (
+    id SERIAL PRIMARY KEY NOT NULL,
+    square DECIMAL(10,2) NOT NULL,
+    countEmpl INT NOT NULL,
+    country VARCHAR(20)
+);
+
+
+CREATE TABLE Product_type(
+    id SERIAL PRIMARY KEY NOT NULL,
+    name VARCHAR(45) NOT NULL,
+    description text NOT NULL
+);
+
+CREATE TABLE Product(
+    id SERIAL PRIMARY KEY NOT NULL,
+    name VARCHAR(45) NOT NULL,
+    count INT,
+    cost DECIMAL(10,2) NOT NULL,
+    idProduct_type INT NOT NULL REFERENCES Product_type(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+CREATE TABLE Sales (
+  id SERIAL PRIMARY KEY NOT NULL,
+  idClient INT NOT NULL REFERENCES Clients(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  idBranch INT NOT NULL REFERENCES Branchs(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  idProduct INT NOT NULL REFERENCES Product(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  count INT NOT NULL,
+  date DATE
+);
+
+CREATE TABLE Employees_type (
+  id SERIAL PRIMARY KEY NOT NULL,
+  name VARCHAR(45) NOT NULL
+);
+
+CREATE TABLE Employees (
+  id SERIAL PRIMARY KEY NOT NULL,
+  name VARCHAR(45) NOT NULL,
+  idEmployees_type INT NOT NULL REFERENCES Employees_type(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  idBranchs INT NOT NULL REFERENCES Branchs(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  idPhones INT NOT NULL REFERENCES Phones(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  idAdresesses INT NOT NULL REFERENCES Addresesses(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE SparePart_type (
+  id SERIAL PRIMARY KEY NOT NULL,
+  name VARCHAR(45) NOT NULL
+);
+
+CREATE TABLE SparePart (
+  id SERIAL PRIMARY KEY NOT NULL,
+  name VARCHAR(45) NOT NULL,
+  whoseDetail VARCHAR(45) NOT NULL,
+  idSparePart_type INT NOT NULL REFERENCES SparePart_type(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Branchs_SparePart (
+  idBranch INT NOT NULL REFERENCES Branchs(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  idSparePart INT NOT NULL REFERENCES SparePart(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+--drop table Addresesses, sales, product, product_type, branchs, branchs_sparepart, sparepart, sparepart_type, clients, phones, employees, employees_type;
